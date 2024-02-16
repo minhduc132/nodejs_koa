@@ -28,7 +28,7 @@ class HomeController {
         } catch (error) {
             add = []
         }
-        let updateData = add.filter(i => i.id == ctx.params.id)
+        let updateData = add.find(i => i.id == ctx.params.id)
         updateData.name = ctx.request.body.name
         let data;
         data = add.filter(i => i.id != ctx.params.id)
