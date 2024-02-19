@@ -9,7 +9,6 @@ app.use(bodyParser());
 const homeRoutes = require('./router/home');
 const productRoutes = require('./router/product')
 
-
 // Sử dụng routes từ home.js
 app.use(homeRoutes.routes());
 app.use(homeRoutes.allowedMethods());

@@ -2,11 +2,14 @@ const Router = require('koa-router');
 const router = new Router();
 
 
-const { create, update, get ,deleteData} = require('../app/controller/HomeController');
+const { addNewHome, updateHome, searchNameHome ,deleteHome} = require('../app/controller/HomeController');
 
-router.post('/create', create);
-router.put('/post/:id', update);
-router.get('/get/:id', get);
-router.delete('/delete/:id',deleteData);
+router.post('/addNewHome', addNewHome);
+
+router.get('/searchNameHome/:id', searchNameHome);
+
+router.put('/updateHome/:id', updateHome);
+
+router.delete('/deleteHome/:id',deleteHome);
 
 module.exports = router;
