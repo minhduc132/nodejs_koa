@@ -21,7 +21,7 @@ class FileStorage {
     }
 
 
-    //hoi 
+    
     async saveFile(imageFile) {
              let rawData = fs.readFileSync(this.filePath, 'utf-8');
              let testArray ;
