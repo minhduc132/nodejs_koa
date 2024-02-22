@@ -1,26 +1,44 @@
 // productController.js
 const Storage = require('../../storage.js');
-const FileStorageStrategy = require('../../fileStorageStrategy.js');
+const FileStorage = require('../../fileStorage.js');
 
-const storage = new Storage(new FileStorageStrategy('./product.json'));
+const storage = new Storage(new FileStorage('./product.json'));
 class ProductController {
-
-
     async addNewProduct(ctx) {
-        let newProduct = await storage.add(ctx.request.body);
-        ctx.body = newProduct;
-    }
-
-    async searchNameProduct(ctx) {
-        let searchResult = await storage.search(ctx.params.name);
-        ctx.body = searchResult;
+        try {
+            if(!ctx.request.files || Object.keys(ctx.request.files).length === 0){
+                ctx.status = 400; 
+                ctx.body = { error: "error data" };
+                return;
+            }
+            const imageData = ctx.query;
+            
+            //const image = ctx.request.files.name;
+             // gọi hàm saveFile luu file từ fileStorage
+            const imagePath = await storage.strategy.saveFile(imageData);
+            ctx.body = imagePath;
+        
+        } catch (error) {
+            ctx.body = { error: "error add user" };
+        }
     }
 
     async updateProduct(ctx) {
-        let updatedProduct = await storage.update(ctx.params.id, ctx.request.body);
-        ctx.body = updatedProduct;
+        try {
+            
+            // lay id 
+            const productId = ctx.query.id;
+            //lay tat ca ra 
+            const product = ctx.query;
+           
+            // Cập nhật sản phẩm trong cơ sở dữ liệu bằng hàm
+            const updatedProduct = await storage.update(productId, product,);
+            ctx.body = updatedProduct;
+        } catch (error) {
+            ctx.status = 500;
+            ctx.body = { error: "Error updating product" };
+        }
     }
-
     async deleteProduct(ctx) {
         let filteredProducts = await storage.delete(ctx.params.id);
         ctx.body = filteredProducts;
@@ -28,80 +46,4 @@ class ProductController {
 }
 
 module.exports = new ProductController();
-
-
-
-
-
-// let fs = require('fs')
-//  class ProductController{
-  
-//     async addNewProduct(ctx) {
-//         let text = fs.readFileSync('./product.json', 'utf8');
-//         let newProduct;
-//         try {
-//             newProduct = JSON.parse(text)
-//         } catch (error) {
-//             newProduct = []
-//         }
-//         newProduct.push(ctx.request.body)
-//         fs.writeFile('product.json', JSON.stringify(newProduct), function (err) {
-//             if (err) throw err;
-//             console.log('Saved!');
-//         });
-//         ctx.body = newProduct;
-//     }
-
-//     async searchNameProduct(ctx) {
-//         let text = fs.readFileSync('./product.json', 'utf8');
-//         let name;
-//         try {
-//             name = JSON.parse(text)
-//         } catch (error) {
-//             name = []
-//         }
-//         name.push(ctx.request.body)
-//         let search = create.filter(i => i.name == ctx.params.name)
-//         ctx.body = search 
-//     }
-    
-//     async updateProduct(ctx) {
-//         let text = fs.readFileSync('./product.json', 'utf8');
-//         let update;
-//         console.log(ctx.params.id)
-//         try {
-//             update = JSON.parse(text)
-//         } catch (error) {
-//             update = []
-//         }
-//         let updateData = update.find(i => i.id == ctx.params.id)
-//         updateData.name = ctx.request.body.name
-//         updateData.address = ctx.request.body.address
-//         let product;
-//         product = update.filter(i => i.id != ctx.params.id)
-//         product.push(updateData)
-//         fs.writeFile('product.json', JSON.stringify(product), function (err) {
-//             if (err) throw err;
-//             console.log('Saved!');
-//         });
-//         ctx.body = updateData;
-//     }
-    
-//     async deleteProduct(ctx){
-//         let text = fs.readFileSync('./product.json', 'utf8');
-//         let deleteProduct;
-//         try {
-//             deleteProduct = JSON.parse(text)
-//         } catch (error) {
-//             deleteProduct = []
-//         }
-//         let updateData =  deleteProduct.filter(i=> i.id == ctx.params.id)
-//         const filteredItems = deleteProduct.filter(item => !updateData.includes(item))//kiem tra xem co ko  trong updateData, include tra về boolean 
-//         ctx.body = filteredItems;    
-//        } 
-
-//  }
-//  module.exports = new ProductController();
-
-
 

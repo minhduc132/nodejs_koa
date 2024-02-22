@@ -1,18 +1,18 @@
 const Router = require('koa-router');
 const router = new Router();
 
-const {addNewProduct,searchNameProduct,updateProduct,deleteProduct} = require('../app/controller/ProductController');
+
+
+const {addNewProduct,updateProduct,deleteProduct} = require('../app/controller/ProductController');
 
 // add data 
 router.post('/addNewProduct', addNewProduct);
 
-//search data theo name
-router.get('/searchNameProduct/:name', searchNameProduct);
 
 //edit data theo id
-router.patch('/update/:id',updateProduct);
+router.put('/updateProduct/:id',updateProduct);
 
 //delete data theo id
-router.get('/delete/:id',deleteProduct);
+router.get('/deleteProduct/:id',deleteProduct);
 
 module.exports = router;

@@ -8,10 +8,15 @@ class Storage {
     async add(data) {
         return await this.strategy.add(data);
     }
+    
+    async saveFile(imageFile) {
+        return await this.strategy.search(imageFile);
+    }
 
     async search(query) {
         return await this.strategy.search(query);
     }
+    
 
     async update(id, newData) {
         return await this.strategy.update(id, newData);
