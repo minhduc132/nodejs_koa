@@ -1,8 +1,8 @@
 // productController.js
 const Storage = require('../../storage.js');
 const FileStorage = require('../../fileStorage.js');
-
 const storage = new Storage(new FileStorage('./user.json'));
+
 class UserController {
 
     async addUser(ctx) {
