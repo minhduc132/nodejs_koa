@@ -1,7 +1,7 @@
 // productController.js
 const Storage = require('../../storage.js');
 const FileStorage = require('../../fileStorage.js');
-const storage = new Storage(new FileStorage('./user.json'));
+const storage = new Storage(new FileStorage('./data/user.json'));
 
 class UserController {
 
@@ -22,18 +22,10 @@ class UserController {
     }
     
     async searchUser(ctx) {
-        if(!ctx.request.body || Object.keys(ctx.request.body).length === 0){
-            ctx.status = 400; 
-            ctx.body = { error: "error data" };
-            return;
-        }
+      
         let searchResult = await storage.search(ctx.params.name);
         ctx.body = searchResult;
-        } catch (error) {
-            ctx.body = { error: "error add user" };
-        
-        }
-
+    }
     async updateUser(ctx) {
         if(!ctx.request.body || Object.keys(ctx.request.body).length === 0){
             ctx.status = 400; 
@@ -47,11 +39,7 @@ class UserController {
         }
      
     async deleteUser(ctx) {
-        if(!ctx.request.body || Object.keys(ctx.request.body).length === 0){
-            ctx.status = 400; 
-            ctx.body = { error: "error data" };
-            return;
-        }
+    
         let filteredProducts = await storage.delete(ctx.params.id);
         ctx.body = filteredProducts;
         }

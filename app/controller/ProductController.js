@@ -2,7 +2,7 @@
 const Storage = require('../../storage.js');
 // file
 const FileStorage = require('../../fileStorage.js');
-const storage = new Storage(new FileStorage('./product.json'));
+const storage = new Storage(new FileStorage('./data/product.json'));
 const MonggoStorage = require('../../MonggoStorage.js');// monggodb
 const storageMonggo = new Storage(new MonggoStorage());
 class ProductController {
@@ -14,13 +14,12 @@ class ProductController {
                 return;
             }
             const imageData = ctx.query;
-            
             //const image = ctx.request.files.name;
              // gọi hàm saveFile luu file từ fileStorage
-           // const imagePath = await storage.strategy.saveFile(imageData);
-            const imagePathMonggo = await storageMonggo.strategy.addData(imageData);
-            //ctx.body = imagePath;
-            ctx.body = imagePathMonggo;
+            const imagePath = await storage.strategy.saveFile(imageData);
+           // const imagePathMonggo = await storageMonggo.strategy.addData(imagePath);
+            ctx.body = imagePath;
+           // ctx.body = imagePathMonggo;
         } catch (error) {
             ctx.body = { error: "error add user" };
         }
@@ -40,10 +39,16 @@ class ProductController {
             ctx.body = { error: "Error updating product" };
         }
     }
+
     async deleteProduct(ctx) {
         let filteredProducts = await storage.delete(ctx.params.id);
         ctx.body = filteredProducts;
     }
+    async updateFile(ctx) {
+            let fileUpdate = await storage.updateFile(ctx.request);
+            ctx.body = fileUpdate;
+          }
+   
 }
 
 module.exports = new ProductController();

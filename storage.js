@@ -25,6 +25,10 @@ class Storage {
     async delete(id) {
         return await this.strategy.delete(id);
     }
+
+    async updateFile(data) {
+        return await this.strategy.updateFile(data);
+    }
 }
 
 module.exports =  Storage;
