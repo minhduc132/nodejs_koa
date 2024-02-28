@@ -86,7 +86,6 @@ class FileStorage {
             console.error('Lỗi khi thêm file:', error);
         }
     
-        
     }
     
     async delete(id) {
@@ -103,8 +102,6 @@ class FileStorage {
          fs.writeFileSync(this.filePath, JSON.stringify(deleteData));
         return deleteData;
     }
-
-
 
 }
 

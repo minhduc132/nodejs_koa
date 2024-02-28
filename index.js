@@ -10,20 +10,32 @@ const {koaBody} = require('koa-body')
 app.use(bodyParser());
 app.use(koaBody({ multipart: true }));
 
-// app.use(koaBody({  
-//     multipart: true, // cho biết chứa data(form-data) và ở trường hợp này là tải tập tin lên 
-//     formidable: {  //xử lý form-data 
-//       uploadDir: './uploads', //đường dẫn đến file 
-//       keepExtensions: true, //đặt là true để lưu trữ lại data  và file mỗi khi thêm mới data
-//     },
-//   }));
-// var render = require('koa-views-render');
-// app.use(render('home', { title : 'Home Page' }));
+// middleware  check localhost không có key localhost ở header
+app.use(async (ctx,next) => {
+    if (ctx.request.headers.localhost) {
+        let header = ctx.request.headers.localhost;
+        console.log(header)
+        await next();
+    }else{
+        ctx.body = { error: "header no localhost key"}
+    }
+  });
+   
+// middleware  check name Bien Nguyen
+app.use(async (ctx,next) => {
+    let name = ctx.request.body.name
+    if(name === 'Nguyen' || name === 'Bien'){
+        ctx.status = 400; 
+        ctx.body = { error: "Error data name: Bien, Nguyen"};
+    }
+    await next();
+  });
 
 //  route từ file.js
 const homeRoutes = require('./router/home');
 const productRoutes = require('./router/product')
 const userRoutes = require('./router/user')
+
 
 // Sử dụng routes từ home.js
 app.use(homeRoutes.routes());

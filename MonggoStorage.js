@@ -52,7 +52,26 @@ async  addData(dataAdd) {
     }
 }
 
+async  delete(data) {
+    const client = new MongoClient(url);
+    try {
+        const database = client.db(dbName);
+        const product = database.collection("products");
+        // Query for a movie that has title "Annie Hall"
+        const result = await product.deleteOne(data);
+        if (result.deletedCount === 1) {
+          console.log("Successfully deleted one document.");
+        } else {
+          console.log("No documents matched the query. Deleted 0 documents.");
+        }
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            await client.close();
+        }
+    }
 }
+
 module.exports =  MonggoStorage;
 
 // // Dữ liệu muốn thêm vào

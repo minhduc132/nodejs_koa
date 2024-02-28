@@ -7,17 +7,12 @@ class UserController {
 
     async addUser(ctx) {
         try {
-            // kiem  tra data có đáp ứng đủ hay k
-            if(!ctx.request.body || Object.keys(ctx.request.body).length === 0){
-                ctx.status = 400; 
-                ctx.body = { error: "error data" };
-                return;
-            }
         // hợp lệ thêm mới 
         let newProduct = await storage.add(ctx.request.body);
         ctx.body = newProduct;
         } catch (error) {
             ctx.body = { error: "error add user" };
+            return;
         }
     }
     

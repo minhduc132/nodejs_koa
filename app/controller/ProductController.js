@@ -15,10 +15,11 @@ class ProductController {
             }
             const imageData = ctx.query;
             //const image = ctx.request.files.name;
-             // gọi hàm saveFile luu file từ fileStorage
+            // gọi hàm saveFile luu file từ fileStorage
             const imagePath = await storage.strategy.saveFile(imageData);
-           // const imagePathMonggo = await storageMonggo.strategy.addData(imagePath);
             ctx.body = imagePath;
+
+           // const imagePathMonggo = await storageMonggo.strategy.addData(imagePath);
            // ctx.body = imagePathMonggo;
         } catch (error) {
             ctx.body = { error: "error add user" };
@@ -30,7 +31,6 @@ class ProductController {
             const productId = ctx.query.id;
             //lay tat ca ra 
             const product = ctx.query;
-           
             // Cập nhật sản phẩm trong cơ sở dữ liệu bằng hàm
             const updatedProduct = await storage.update(productId, product,);
             ctx.body = updatedProduct;
@@ -44,11 +44,11 @@ class ProductController {
         let filteredProducts = await storage.delete(ctx.params.id);
         ctx.body = filteredProducts;
     }
+
     async updateFile(ctx) {
             let fileUpdate = await storage.updateFile(ctx.request);
             ctx.body = fileUpdate;
           }
-   
 }
 
 module.exports = new ProductController();
