@@ -9,6 +9,15 @@ const {koaBody} = require('koa-body')
 
 app.use(bodyParser());
 app.use(koaBody({ multipart: true }));
+
+app.use(async (ctx,next) => {
+  if (Object.keys(ctx.request.body).length === 0) {
+    ctx.body = { error: "body null"}
+  }else{
+    await next();
+  }
+});
+
  
 // middleware  check name Bien Nguyen
 app.use(async (ctx,next) => {
@@ -30,6 +39,8 @@ app.use(async (ctx,next) => {
         ctx.body = { error: "header no localhost key"}
     }
   });
+
+
 
 //  route từ file.js
 const homeRoutes = require('./router/home');
