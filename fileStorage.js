@@ -52,7 +52,7 @@ class FileStorage {
         } catch (error) {
             products = [];
         }
-         let productToUpdate = products.filter(product => product.id === parseInt(id)); 
+         let productToUpdate = products.filter(product => product.id === id); 
         // Duyệt qua từng phần tử trong mảng filteredProducts và cập nhật thuộc tính mới
         // update lai  cac phan name,quantity
        if(productToUpdate !== -1){
@@ -97,7 +97,7 @@ class FileStorage {
             products = [];
         }
         
-        let filteredData = products.filter(product => product.id == parseInt(id));
+        let filteredData = products.filter(product => product.id == id);
         let deleteData = products.filter(item => !filteredData.includes(item))
          fs.writeFileSync(this.filePath, JSON.stringify(deleteData));
         return deleteData;

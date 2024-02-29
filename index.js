@@ -9,18 +9,7 @@ const {koaBody} = require('koa-body')
 
 app.use(bodyParser());
 app.use(koaBody({ multipart: true }));
-
-// middleware  check localhost không có key localhost ở header
-app.use(async (ctx,next) => {
-    if (ctx.request.headers.localhost) {
-        let header = ctx.request.headers.localhost;
-        console.log(header)
-        await next();
-    }else{
-        ctx.body = { error: "header no localhost key"}
-    }
-  });
-   
+ 
 // middleware  check name Bien Nguyen
 app.use(async (ctx,next) => {
     let name = ctx.request.body.name
@@ -29,6 +18,17 @@ app.use(async (ctx,next) => {
         ctx.body = { error: "Error data name: Bien, Nguyen"};
     }
     await next();
+  });
+
+// middleware  check localhost không có key localhost ở header  
+  app.use(async (ctx,next) => {
+    if (ctx.request.headers.localhost) {
+        let header = ctx.request.headers.localhost;
+        console.log(header)
+        await next();
+    }else{
+        ctx.body = { error: "header no localhost key"}
+    }
   });
 
 //  route từ file.js

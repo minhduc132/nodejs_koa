@@ -12,7 +12,7 @@ router.post('/addNewProduct', addNewProduct);
 router.put('/updateProduct/:id',updateProduct);
 
 //delete data theo id
-router.get('/deleteProduct/:id',deleteProduct);
+router.post('/deleteProduct/:id',deleteProduct);
 
 //update Image 
 router.post('/uploadFile', updateFile)

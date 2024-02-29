@@ -8,12 +8,8 @@ const storageMonggo = new Storage(new MonggoStorage());
 class ProductController {
     async addNewProduct(ctx) {
         try {
-            if(!ctx.query || Object.keys(ctx.query).length === 0){
-                ctx.status = 400; 
-                ctx.body = { error: "error data" };
-                return;
-            }
-            const imageData = ctx.query;
+         
+            const imageData = ctx.request.body;
             //const image = ctx.request.files.name;
             // gọi hàm saveFile luu file từ fileStorage
             const imagePath = await storage.strategy.saveFile(imageData);
@@ -28,9 +24,9 @@ class ProductController {
     async updateProduct(ctx) {
         try {  
             // lay id 
-            const productId = ctx.query.id;
+            const productId = ctx.request.body.id;
             //lay tat ca ra 
-            const product = ctx.query;
+            const product = ctx.request.body;
             // Cập nhật sản phẩm trong cơ sở dữ liệu bằng hàm
             const updatedProduct = await storage.update(productId, product,);
             ctx.body = updatedProduct;
@@ -41,7 +37,7 @@ class ProductController {
     }
 
     async deleteProduct(ctx) {
-        let filteredProducts = await storage.delete(ctx.params.id);
+        let filteredProducts = await storage.delete(ctx.request.body.id);
         ctx.body = filteredProducts;
     }
 

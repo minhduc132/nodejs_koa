@@ -7,7 +7,6 @@ class UserController {
 
     async addUser(ctx) {
         try {
-        // hợp lệ thêm mới 
         let newProduct = await storage.add(ctx.request.body);
         ctx.body = newProduct;
         } catch (error) {
