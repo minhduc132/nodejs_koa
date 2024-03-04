@@ -29,6 +29,10 @@ class Storage {
     async updateFile(data) {
         return await this.strategy.updateFile(data);
     }
+
+    async getData(data) {
+        return await this.strategy.getData(data);
+    }
 }
 
 module.exports =  Storage;

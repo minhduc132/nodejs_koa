@@ -1,5 +1,8 @@
 // fileStorageStrategy.js
-const fs = require('fs');
+const handlebars = require('handlebars');
+const render = require('koa-views-render');
+const fs = require('fs').promises;
+
 const path = require('path');
 
 
@@ -8,6 +11,19 @@ class FileStorage {
         this.filePath = filePath;
         console.log("call FileStorageStrategy");
     }
+
+    async getData(ctx){
+            try {
+                const template = await fs.readFile("home.hbs", "utf-8");
+                const compiledTemplate = handlebars.compile(template);
+                const html = compiledTemplate({ data: ctx.data });
+                return html;
+            } catch (err) {
+                console.error('Error reading Handlebars template:', err);
+            }
+            
+        }
+
 
     async add(data) {
         let rawData = fs.readFileSync(this.filePath);

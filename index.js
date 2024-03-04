@@ -16,7 +16,6 @@ app.use(async (ctx, next) => {
         }
     }
     await next();
-
 });
 
 // Middleware kiểm tra tên là Bien ,Nguyen

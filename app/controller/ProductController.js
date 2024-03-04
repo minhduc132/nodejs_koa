@@ -1,6 +1,5 @@
 // productController.js
-const handlebars = require('handlebars');
-const fs = require('fs').promises;
+
 const Storage = require('../../storage.js');
 // file
 const FileStorage = require('../../fileStorage.js');
@@ -48,16 +47,20 @@ class ProductController {
             ctx.body = fileUpdate;
           }
        
-    async product(ctx){
-        try {
-            const template = await fs.readFile("product.hbs", "utf-8");
-            const compiledTemplate = handlebars.compile(template);
-            const html = compiledTemplate({ data: ctx.state.data });
-            ctx.body = html;
-        } catch (err) {
-            console.error('Error reading Handlebars template:', err);
-        }
-    }
+    // async product(ctx){
+    //     try {
+    //         const template = await fs.readFile("product.hbs", "utf-8");
+    //         const compiledTemplate = handlebars.compile(template);
+    //         const html = compiledTemplate({ data: ctx.state.data });
+    //         ctx.body = html;
+    //     } catch (err) {
+    //         console.error('Error reading Handlebars template:', err);
+    //     }
+    // }
+    async product(ctx) {
+        let getData = await storage.getData(ctx.state);
+        ctx.body = getData;
+      }
 }
 
 module.exports = new ProductController();

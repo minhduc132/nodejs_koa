@@ -1,1 +1,15 @@
-[{"id":"15","name":"minh duc"},{"id":"16","name":"minh duc 17"},{"id":"25","name":"minh duc","address":"123hn"}]
+[
+    {
+        "id": "15",
+        "name": "minh duc"
+    },
+    {
+        "id": "16",
+        "name": "minh duc 17"
+    },
+    {
+        "id": "25",
+        "name": "minh duc",
+        "address": "123hn"
+    }
+]
