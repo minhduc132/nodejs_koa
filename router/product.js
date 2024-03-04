@@ -3,7 +3,7 @@ const router = new Router();
 
 
 
-const {addNewProduct,updateProduct,deleteProduct,updateFile} = require('../app/controller/ProductController');
+const {addNewProduct,updateProduct,deleteProduct,updateFile,product} = require('../app/controller/ProductController');
 
 // add data 
 router.post('/addNewProduct', addNewProduct);
@@ -16,5 +16,9 @@ router.post('/deleteProduct/:id',deleteProduct);
 
 //update Image 
 router.post('/uploadFile', updateFile)
+
+//api trả về data
+router.get('/product', product)
+
 
 module.exports = router;

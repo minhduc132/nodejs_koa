@@ -8,6 +8,7 @@ class FileStorage {
         this.filePath = filePath;
         console.log("call FileStorageStrategy");
     }
+
     async add(data) {
         let rawData = fs.readFileSync(this.filePath);
         let products ;
@@ -44,6 +45,8 @@ class FileStorage {
         let products = JSON.parse(rawData);
         return products.filter(product => product.name === query);
     }
+
+    
     async update(id, newData) {
         let rawData = fs.readFileSync(this.filePath);
         let products;
@@ -55,15 +58,16 @@ class FileStorage {
          let productToUpdate = products.filter(product => product.id === id); 
         // Duyệt qua từng phần tử trong mảng filteredProducts và cập nhật thuộc tính mới
         // update lai  cac phan name,quantity
-       if(productToUpdate !== -1){
         productToUpdate.forEach(product => {
             product.name = newData.name;
             product.address= newData.address;
             product.quantity = newData.quantity;
         });
-            fs.writeFileSync(this.filePath, JSON.stringify(products));  
+        let outProduct = products.filter(product => product.id !== id)
+
+            fs.writeFileSync(this.filePath, JSON.stringify(outProduct.concat(productToUpdate)));  
             return productToUpdate;
-        }
+        
     }
 
     async updateFile(data) {

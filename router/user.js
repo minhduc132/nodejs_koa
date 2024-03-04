@@ -10,5 +10,5 @@ router.post('/searchUser/:name', searchUser);
 
 router.put('/updateUser/:id', updateUser);
 
-router.get('/deleteUser/:id', deleteUser);
+router.post('/deleteUser/:id', deleteUser);
 module.exports = router;

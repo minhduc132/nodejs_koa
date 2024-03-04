@@ -1,52 +1,64 @@
 const Koa = require('koa');
 const app = new Koa();
 const bodyParser = require('koa-bodyparser');
-const {koaBody} = require('koa-body')
-
-// gửi tập tin koa-body sẽ nhận và xử lý data 
-//phân tích nội dung đã gửi từ form data  và lưu trữ các tệp tin được tải lên
-// vào thư mục đã chỉ định (./uploads) 
+const { koaBody } = require('koa-body');
+const fs = require('fs').promises;
 
 app.use(bodyParser());
+
 app.use(koaBody({ multipart: true }));
 
-app.use(async (ctx,next) => {
-  if (Object.keys(ctx.request.body).length === 0) {
-    ctx.body = { error: "body null"}
-  }else{
+// Middleware kiểm tra body không được trống
+app.use(async (ctx, next) => {
+    if (ctx.method === 'POST') {
+        if (ctx.request.body && Object.keys(ctx.request.body).length === 0) {
+            ctx.body = { error: "body null" }
+        }
+    }
     await next();
-  }
+
 });
 
- 
-// middleware  check name Bien Nguyen
-app.use(async (ctx,next) => {
-    let name = ctx.request.body.name
-    if(name === 'Nguyen' || name === 'Bien'){
-        ctx.status = 400; 
-        ctx.body = { error: "Error data name: Bien, Nguyen"};
+// Middleware kiểm tra tên là Bien ,Nguyen
+app.use(async (ctx, next) => {
+    if (ctx.method === 'POST') {
+    let name = ctx.request.body?.name
+    if (name === 'Nguyen' || name === 'Bien') {
+        ctx.body = { error: "Error data name: Bien, Nguyen" };
     }
+}
     await next();
-  });
 
-// middleware  check localhost không có key localhost ở header  
-  app.use(async (ctx,next) => {
-    if (ctx.request.headers.localhost) {
+});
+
+// Middleware kiểm tra localhost không có khóa localhost trong header
+app.use(async (ctx, next) => {
+    if (ctx.method === 'POST') {
+    if (!ctx.request.headers.localhost) {
         let header = ctx.request.headers.localhost;
         console.log(header)
-        await next();
-    }else{
-        ctx.body = { error: "header no localhost key"}
     }
-  });
+}
+   await next();
+});
 
+//Middleware để cung cấp dữ liệu
+app.use(async (ctx, next) => {
+    try { 
+        const data = await fs.readFile('./data/product.json', 'utf-8');
+        ctx.state.data = JSON.parse(data); //gán data 
+        await next();
+    } catch (err) {
+        console.error('Error reading JSON file:', err);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+});
 
-
-//  route từ file.js
+// Route từ file.js
 const homeRoutes = require('./router/home');
 const productRoutes = require('./router/product')
 const userRoutes = require('./router/user')
-
 
 // Sử dụng routes từ home.js
 app.use(homeRoutes.routes());
@@ -59,7 +71,6 @@ app.use(productRoutes.allowedMethods());
 // Sử dụng routes từ user.js
 app.use(userRoutes.routes());
 app.use(userRoutes.allowedMethods());
-
 
 let PORT = 5000;
 app.listen(PORT, () => {

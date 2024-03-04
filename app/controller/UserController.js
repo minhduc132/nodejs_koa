@@ -16,17 +16,12 @@ class UserController {
     }
     
     async searchUser(ctx) {
-      
-        let searchResult = await storage.search(ctx.params.name);
+        let searchResult = await storage.search(ctx.request.body.name);
         ctx.body = searchResult;
     }
-    async updateUser(ctx) {
-        if(!ctx.request.body || Object.keys(ctx.request.body).length === 0){
-            ctx.status = 400; 
-            ctx.body = { error: "error data" };
-            return;
-        }
-        let updatedUser = await storage.update(ctx.params.id, ctx.request.body);
+
+    async updateUser(ctx) {   
+        let updatedUser = await storage.update(ctx.request.body.id, ctx.request.body);
         ctx.body = updatedUser;
         } catch (error) {
             ctx.body = { error: "error add user" };
@@ -34,7 +29,7 @@ class UserController {
      
     async deleteUser(ctx) {
     
-        let filteredProducts = await storage.delete(ctx.params.id);
+        let filteredProducts = await storage.delete(ctx.request.body.id);
         ctx.body = filteredProducts;
         }
 }
