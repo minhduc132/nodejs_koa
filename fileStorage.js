@@ -19,7 +19,7 @@ class FileStorage {
                 console.error('Error reading Handlebars template:', err);
             }   
         }
-
+        
     async add(data) {
         let rawData = fs.readFileSync(this.filePath);
         let products ;

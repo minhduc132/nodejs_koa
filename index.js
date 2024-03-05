@@ -41,11 +41,22 @@ app.use(async (ctx, next) => {
    await next();
 });
 
-//Middleware để cung cấp dữ liệu
+// Function to add image path to each product object
+const addImagePath = (product) => {
+    const imagePath = `/upload/${product.image}`; // Adjust this based on your image directory
+    return { ...product, imagePath };
+};
+
+// Middleware để cung cấp dữ liệu
 app.use(async (ctx, next) => {
     try { 
         const data = await fs.readFile('./data/product.json', 'utf-8');
-        ctx.state.data = JSON.parse(data); //gán data 
+        const parsedData = JSON.parse(data);
+
+        // Thêm đường dẫn hình ảnh cho mỗi sản phẩm
+        const dataWithImages = parsedData.map(addImagePath);
+
+        ctx.state.data = dataWithImages; // Gán dữ liệu có đường dẫn hình ảnh
         await next();
     } catch (err) {
         console.error('Error reading JSON file:', err);
