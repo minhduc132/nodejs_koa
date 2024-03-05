@@ -1,11 +1,8 @@
-// fileStorageStrategy.js
+
 const handlebars = require('handlebars');
 const render = require('koa-views-render');
-const fs = require('fs').promises;
-
+const fs = require('fs');
 const path = require('path');
-
-
 class FileStorage {
     constructor(filePath) {
         this.filePath = filePath;
@@ -14,16 +11,14 @@ class FileStorage {
 
     async getData(ctx){
             try {
-                const template = await fs.readFile("home.hbs", "utf-8");
+                const template = await fs.promises.readFile("home.hbs", "utf-8");
                 const compiledTemplate = handlebars.compile(template);
                 const html = compiledTemplate({ data: ctx.data });
                 return html;
             } catch (err) {
                 console.error('Error reading Handlebars template:', err);
-            }
-            
+            }   
         }
-
 
     async add(data) {
         let rawData = fs.readFileSync(this.filePath);
@@ -38,7 +33,6 @@ class FileStorage {
          fs.writeFileSync(this.filePath, JSON.stringify(products));
         return products;
     }
-
 
     async saveFile(imageFile) {
              let rawData = fs.readFileSync(this.filePath, 'utf-8');
@@ -83,31 +77,35 @@ class FileStorage {
 
             fs.writeFileSync(this.filePath, JSON.stringify(outProduct.concat(productToUpdate)));  
             return productToUpdate;
-        
     }
 
     async updateFile(data) {
         try {
-            const file = data.files.image;// file image
-            const name = data.body.name; // data đi kèm 
-    
+            const file = data.files.image.filepath;// file image
+            const name = data.body.name; // data đi kèm   
             // Đường dẫn đến thư mục lưu trữ file và tên file
-            const filePath = `./uploads/${name}.json`;
-    
-            // Ghi dữ liệu vào file
-            fs.writeFile(filePath, JSON.stringify(file), (err) => {
+            const filePath = path.join(__dirname, 'uploads', `${name}.jpg`);
+  
+            //đọc data  file ảnh 
+            fs.readFile(file, (err, imageData) => {
                 if (err) {
-                    console.error('Lỗi khi ghi file:', err);
+                    console.error('Lỗi khi đọc file ảnh:', err);
                     return;
                 }
-                console.log(`Đã thêm file ${name}.json vào thư mục uploads thành công`);
+                // Ghi dữ liệu vào file mới
+                fs.writeFile(filePath, imageData, (err) => {
+                    if (err) {
+                        console.error('Lỗi khi ghi file mới:', err);
+                        return;
+                    }
+                    console.log(`Đã thêm file ${name}.jpg vào thư mục uploads thành công`);
+                });
             });
         } catch (error) {
             console.error('Lỗi khi thêm file:', error);
         }
-    
     }
-    
+
     async delete(id) {
         let rawData = fs.readFileSync(this.filePath);
         let products;

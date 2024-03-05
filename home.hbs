@@ -4,12 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
+    <style>
+      
+        ul {
+            list-style-type: none;
+            padding: 0;
+            border: 1px solid;
+            width: 200px;
+        }
+        li {
+           border: 1px solid;
+        }
+    </style>
 </head>
 <body>
     <h1>Product List</h1>
     <ul>
-        {{#each data}}      
-            <li>{{name}} - {{quantity}}</li>
+        {{#each data}}  
+            <li>
+                <strong>Name:</strong> {{name}} <br>
+                <strong>Quantity:</strong> {{quantity}} <br>
+                
+            </li>
         {{/each}}
     </ul>
 </body>
