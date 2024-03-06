@@ -2,7 +2,9 @@ const Koa = require('koa');
 const app = new Koa();
 const bodyParser = require('koa-bodyparser');
 const { koaBody } = require('koa-body');
+const koaStatic = require('koa-static');
 const fs = require('fs').promises;
+const path = require('path');
 
 app.use(bodyParser());
 
@@ -41,22 +43,23 @@ app.use(async (ctx, next) => {
    await next();
 });
 
-// Function to add image path to each product object
-const addImagePath = (product) => {
-    const imagePath = `/upload/${product.image}`; // Adjust this based on your image directory
-    return { ...product, imagePath };
-};
 
-// Middleware để cung cấp dữ liệu
+// Thư mục chứa ảnh
+const imageFolder = path.join(__dirname, 'uploads');
+// sử dụng các tập tĩnh trong file image
+app.use(koaStatic(imageFolder));
+//Middleware để cung cấp dữ liệu
 app.use(async (ctx, next) => {
     try { 
         const data = await fs.readFile('./data/product.json', 'utf-8');
-        const parsedData = JSON.parse(data);
+        ctx.state.data = JSON.parse(data); //gán data theo kiểu json
 
-        // Thêm đường dẫn hình ảnh cho mỗi sản phẩm
-        const dataWithImages = parsedData.map(addImagePath);
+         // Lấy danh sách các tệp ảnh từ thư mục
+         const imageFiles = await fs.readdir(imageFolder);
+        
+         // Gán danh sách ảnh vào context
+         ctx.state.images = imageFiles;
 
-        ctx.state.data = dataWithImages; // Gán dữ liệu có đường dẫn hình ảnh
         await next();
     } catch (err) {
         console.error('Error reading JSON file:', err);
@@ -64,6 +67,7 @@ app.use(async (ctx, next) => {
         ctx.body = 'Internal Server Error';
     }
 });
+
 
 // Route từ file.js
 const homeRoutes = require('./router/home');

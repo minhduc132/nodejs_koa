@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title >Product List</title>
+    <style>
+      
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: auto;  
+            float: left;
+            text-align: center;
+        }
+       
+        li {
+           border: 1px solid;
+            height: auto;
+            text-align: center;
+            width: 200px;
+            margin-bottom: 10px;
+                }
+        li img {
+            width: 100%;
+            height: 100%;
+
+        }        
+        h1{
+            color: brown;
+          
+        }    
+      
+       
+    </style>
+</head>
+<body>
+    <h1>Product List</h1>
+
+    <class="data">
+   <ul>
+    {{#each data}}  
+        <li>
+            <strong>Name:</strong> {{name}} <br>
+            <strong>Quantity:</strong> {{quantity}} <br>
+        </li>
+    {{/each}}
+</ul>
+</class>
+<class="image">
+<ul>
+    {{#each imagePaths}}
+    <li> 
+        <img src="/{{this}}" alt="Product Image">
+    </li> 
+{{/each}}
+</ul>
+    </class>
+
+</body>
+</html>

@@ -1,6 +1,5 @@
 
 const handlebars = require('handlebars');
-const render = require('koa-views-render');
 const fs = require('fs');
 const path = require('path');
 class FileStorage {
@@ -10,16 +9,16 @@ class FileStorage {
     }
 
     async getData(ctx){
-            try {
-                const template = await fs.promises.readFile("home.hbs", "utf-8");
-                const compiledTemplate = handlebars.compile(template);
-                const html = compiledTemplate({ data: ctx.data });
-                return html;
-            } catch (err) {
-                console.error('Error reading Handlebars template:', err);
-            }   
-        }
-        
+        try {
+            const template = await fs.promises.readFile("view/home.hbs", "utf-8");
+            const compiledTemplate = handlebars.compile(template);
+            const html = compiledTemplate({ data: ctx.data, imagePaths: ctx.images });   
+          return html;
+        } catch (err) {
+            console.error('Error reading Handlebars template:', err);
+        }   
+    }
+
     async add(data) {
         let rawData = fs.readFileSync(this.filePath);
         let products ;
